@@ -45,3 +45,35 @@ const curriedSum = (numArgs) => {
 };
 
 console.log(curriedSum(4)(1)(2)(4)(6));
+
+Function.prototype.curry = function (numArgs) {
+  let collection = [];
+  let _curry = (arg) => {
+    collection.push(arg);
+    if (collection.length === numArgs) {
+      return this.apply(_curry, collection);
+    } else {
+      return _curry;
+    }
+  };
+  return _curry;
+};
+
+Function.prototype.spreadCurry = function (numArgs) {
+  let collection = [];
+  let _curry = (arg) => {
+    collection.push(arg);
+    if (collection.length === numArgs) {
+      return this.call(_curry, ...collection);
+    } else {
+      return _curry;
+    }
+  };
+  return _curry;
+};
+
+
+function sumThree(num1, num2, num3) {
+  return num1 + num2 + num3;
+}
+console.log(sumThree.spreadCurry(3)(3)(4)(5));
