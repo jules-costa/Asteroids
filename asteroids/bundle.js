@@ -63,27 +63,36 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-const Util = {
-  inherits: function (childClass, parentClass) {
-    var Surrogate = function() {};
-    Surrogate.prototype = parentClass.prototype;
-    childClass.prototype = new Surrogate();
-    childClass.prototype.constructor = childClass;
-  },
+var MovingObject = __webpack_require__ (1);
+var Util = __webpack_require__ (2);
 
-  scale: function (vec, m) {
-    return [vec[0] * m, vec[1] * m];
-  }
+const Asteroid = function (options) {
+  MovingObject.call(this, options);
+  this.color = options.radius || 'red';
+  this.radius = options.radius || 10;
+  this.vel = options.vel || randomVec(5);
 };
+Util.inherits(Asteroid, MovingObject);
 
-module.exports = Util;
+function randomVec (length) {
+  const deg = 2 * Math.PI * Math.random();
+  return Util.scale([Math.sin(deg), Math.cos(deg)], length);
+}
+// Scale the length of a vector by the given amount.
+
+let a = new Asteroid({ pos: [80, 80]});
+a.draw();
+a.move();
+a.draw();
+
+module.exports = Asteroid;
 
 
 /***/ }),
@@ -111,50 +120,62 @@ MovingObject.prototype.move = function () {
   this.pos[1] += this.vel[1];
 };
 
-let m = new MovingObject({ pos: [30, 30], vel: [50, 50], radius: 5, color: "#00FF00"});
-m.draw();
-m.move();
-m.draw();
-
 module.exports = MovingObject;
 
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var MovingObject = __webpack_require__ (1);
-var Util = __webpack_require__ (0);
+const Util = {
+  inherits: function (childClass, parentClass) {
+    var Surrogate = function() {};
+    Surrogate.prototype = parentClass.prototype;
+    childClass.prototype = new Surrogate();
+    childClass.prototype.constructor = childClass;
+  },
 
-const Asteroid = function (options) {
-  MovingObject.call(this, options);
-  this.color = options.radius || 'red';
-  this.radius = options.radius || 10;
-  this.vel = options.vel || randomVec(5);
+  scale: function (vec, m) {
+    return [vec[0] * m, vec[1] * m];
+  }
 };
-Util.inherits(Asteroid, MovingObject);
 
-function randomVec (length) {
-  const deg = 2 * Math.PI * Math.random();
-  return Util.scale([Math.sin(deg), Math.cos(deg)], length);
-}
-// Scale the length of a vector by the given amount.
-
-let a = new Asteroid({ pos: [80, 80]});
-a.draw();
-a.move();
-a.draw();
-
-module.exports = Asteroid;
+module.exports = Util;
 
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__ (0);
+var Asteroid = __webpack_require__ (0);
+
+const Game = function () {
+  // const DIM_X;
+  // const DIM_Y;
+  this.NUM_ASTEROIDS = 1000;
+};
+
+Game.prototype.addAsteroids = function () {
+  for(var i = 0; i < this.NUM_ASTEROIDS; i++) {
+    let a = new Asteroid({ pos: [Math.random() * 1000, Math.random() * 1000]});
+    a.draw();
+  }
+};
+
+let g = new Game();
+g.addAsteroids();
+
+module.exports = Game;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
 __webpack_require__ (2);
+__webpack_require__ (0);
 __webpack_require__ (1);
+__webpack_require__ (3);
 
 
 /***/ })

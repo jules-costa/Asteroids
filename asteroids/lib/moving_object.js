@@ -19,9 +19,4 @@ MovingObject.prototype.move = function () {
   this.pos[1] += this.vel[1];
 };
 
-let m = new MovingObject({ pos: [30, 30], vel: [50, 50], radius: 5, color: "#00FF00"});
-m.draw();
-m.move();
-m.draw();
-
 module.exports = MovingObject;
